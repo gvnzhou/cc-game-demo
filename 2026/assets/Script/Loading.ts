@@ -11,7 +11,7 @@
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export class Loading extends cc.Component {
 
     @property(cc.Label)
     label: cc.Label = null;
@@ -19,18 +19,45 @@ export default class NewClass extends cc.Component {
     @property
     interval: number = 0;
 
+    dotCount: number;
+    dotMaxCount: number;
     // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
         this.dotCount = 0;
-        this.dotMaxCount = 0;
+        this.dotMaxCount = 3;
+        cc.game.addPersistRootNode(this.node);        
     }
 
     start () {
-
+        
     }
 
     // update (dt) {}
 
+    startLoading () {
+        this.label.enabled = true;
+        this.dotCount = 0;
+        let size = cc.view.getVisibleSize();
+        this.node.setPosition(cc.p(size.width/2 - this.label.node.width/2, size.height/2));
+        this.schedule(this.updateLabel, this.interval);
+    }
 
+    stopLoading () {
+        this.label.enabled = false;
+        this.unschedule(this.updateLabel);
+        this.node.setPosition(cc.p(2000, 2000));
+    }
+
+    updateLabel () {
+        let dots: string = '';
+        for (let i = 0; i < this.dotCount; i++) {
+            dots += '.';
+        }
+        this.label.string = 'Loading' + dots;
+        this.dotCount += 1;
+        if (this.dotCount > this.dotMaxCount) {
+            this.dotCount = 0; 
+        }
+    }
 }

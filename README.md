@@ -6,6 +6,6 @@
 
 手打过了一遍官方教程中的Star Catcher游戏例子。
 
-### ![2026雾霾侠](https://github.com/cocos-creator/project2026)
+### [2026雾霾侠](https://github.com/cocos-creator/project2026)
 
 学习TypeScript，准备用TypeScript重写2026雾霾侠。

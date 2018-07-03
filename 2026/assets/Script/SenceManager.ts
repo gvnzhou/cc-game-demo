@@ -7,36 +7,37 @@
 // Learn life-cycle callbacks:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import { Loading } from './Loading'
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class SenceManager extends cc.Component {
 
-    @property(cc.Label)
-    label: cc.Label = null;
-
-    @property
-    text: string = 'hello';
+    private loading: Loading = null;
+    private curLoadingScene: string;
 
     // LIFE-CYCLE CALLBACKS:
 
-    onLoad () {
+    protected onLoad () {
         // 控制抗锯齿是否开启
-        // cc.view.enableAntiAlias(false);
+        cc.view.enableAntiAlias(false);
     }
 
-    start () {
+    protected start () {
 
     }
 
     // update (dt) {}
 
-    loadScence (sceneName) {
-        cc.director.preloadScene(sceneName, onSceneLoaded)
+    private loadScence (sceneName: string) {
+        this.loading.startLoading(); 
+        this.curLoadingScene = sceneName       
+        cc.director.preloadScene(sceneName, this.onSceneLoaded);
     }
 
-    onSceneLoaded () {
-        
+    private onSceneLoaded () {
+        this.loading.stopLoading();
+        cc.director.loadScene(this.curLoadingScene);
     }
 }
